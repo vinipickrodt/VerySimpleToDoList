@@ -37,7 +37,7 @@ self.addEventListener('fetch', function (event) {
                     function (response) {
                         // Check if we received a valid response
                         if (!response || response.status !== 200 || response.type !== 'basic') {
-                            //return respons  e;
+                            return response;
                         }
 
                         // IMPORTANT: Clone the response. A response is a stream
