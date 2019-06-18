@@ -19,11 +19,11 @@ self.addEventListener('fetch', function (event) {
     var url = event.request.url;
     var req = event.request;
 
-    // debugger;
+    // // debugger;
 
-    if (url == "http://localhost:8080/") {
-        req = new Request("http://localhost:8080/index.html");
-    }
+    // if (url == "http://localhost:8080/") {
+    //     req = new Request("http://localhost:8080/index.html");
+    // }
 
     event.respondWith(
         caches.match(req)
