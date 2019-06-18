@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link href="css/main.css" rel="stylesheet" type="text/css" />
+    <script src="js/main.js"></script>
+    <title>2do list</title>
+
+    <script>
+        var todoList = [];
+
+        function newId() {
+            var l = todoList.length + 1;
+
+            while (todoList.filter(todo => todo.id == l).length > 0) {
+                l++;
+            }
+
+            return l;
+        }
+
+        function adicionar(texto) {
+            var id = newId();
+            todoList.push({ id: id, text: texto, date: new Date(), status: "todo" });
+            save();
+            refresh();
+            txtToDo.value = "";
+            txtToDo.focus();
+        }
+
+        function save() {
+            localStorage.setItem("todos", JSON.stringify(todoList));
+        }
+
+        function toggleStatus(e) {
+            var li = this;
+            var id = parseInt(li.getAttribute("data-id"));
+            var todo = todoList.filter(todo => todo.id == id).pop();
+            if (todo) {
+                todo.status = (todo.status == "done" ? "todo" : "done");
+            }
+            save();
+            refresh();
+        }
+
+        function refresh() {
+            var lis = todoList.map(todo => {
+                var li = document.createElement('li');
+                li.innerText = todo.text;
+                li.setAttribute("data-id", todo.id);
+                li.setAttribute("data-date", todo.date.toString());
+                li.addEventListener("click", toggleStatus.bind(li));
+                if (todo.status == "done") {
+                    li.style.textDecoration = "line-through";
+                }
+                return li;
+            });
+
+            lista.innerHTML = "";
+            for (var i = 0; i < lis.length; i++) {
+                lista.appendChild(lis[i]);
+            }
+        }
+
+        window.addEventListener("DOMContentLoaded", function () {
+            var todosStr = localStorage.getItem("todos");
+            if (todosStr) {
+                todoList = JSON.parse(todosStr);
+                todoList = todoList.map(todo => {
+                    var obj = { ...todo };
+                    obj["date"] = new Date(obj["date"]);
+                    return obj;
+                });
+            }
+            refresh();
+        });
+    </script>
+</head>
+
+<body>
+    <div>
+        <h1>2do list</h1>
+        <input type="text" placeholder="Adicionar todo..." id="txtToDo" />
+        <button onclick="adicionar(txtToDo.value)">Adicionar</button>
+        <ul id="lista"></ul>
+    </div>
+</body>
+
+</html>
