@@ -1,8 +1,8 @@
 var CACHE_NAME = 'base-cache';
 var urlsToCache = [
-    '/index.html',
-    '/css/main.css',
-    '/js/main.js'
+    './index.html',
+    './css/main.css',
+    './js/main.js'
 ];
 
 self.addEventListener('install', function (event) {
